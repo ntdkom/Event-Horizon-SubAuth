@@ -35,7 +35,7 @@ WriteLogFile(
 	hFile = CreateFileW(LOGFILEPATH, FILE_APPEND_DATA, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile != INVALID_HANDLE_VALUE) {
 		WCHAR szBuffer[256];
-		WCHAR szTokenFlagBuffer[4];
+		WCHAR szTokenFlagBuffer[12];
 		WCHAR szTimeBuffer[256];
 		SYSTEMTIME st;
 
@@ -55,7 +55,7 @@ WriteLogFile(
 		WriteFile(hFile, L",", sizeof(WCHAR), &dwWritten, NULL);
 		
 		// Write flag which represents if user is allowed to login
-		INT token_flag_length = swprintf_s(szTokenFlagBuffer, 4, L"%d", token_flag);
+		INT token_flag_length = swprintf_s(szTokenFlagBuffer, 10, L"%d", token_flag);
 		if (token_flag_length != -1)
 			WriteFile(hFile, szTokenFlagBuffer, token_flag_length * sizeof(WCHAR), &dwWritten, NULL);
 		WriteFile(hFile, L",", sizeof(WCHAR), &dwWritten, NULL);

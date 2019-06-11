@@ -9,6 +9,6 @@
 
 void UnixTimeToFileTime(time_t, LPFILETIME);
 void UnixTimeToSystemTime(time_t, LPSYSTEMTIME);
-INT VerifyLogonTimeToken(PWSTR);
+INT VerifyLogonTimeToken(PWSTR, PLARGE_INTEGER, PLARGE_INTEGER);
 
 #endif //TIME_F

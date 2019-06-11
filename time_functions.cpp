@@ -19,13 +19,13 @@ void UnixTimeToSystemTime(time_t t, LPSYSTEMTIME pst)
 	FileTimeToSystemTime(&ft, pst);
 }
 
-INT VerifyLogonTimeToken(PWSTR ldap_timestamp)
+INT VerifyLogonTimeToken(PWSTR ldap_timestamp, PLARGE_INTEGER logoff_timestamp, PLARGE_INTEGER kickoff_timestamp)
 {
 	INT return_code = 0; // Default return value does not permit user to login;
 	SYSTEMTIME st_now;
 	FILETIME utc_now, utc_ldap;
 	size_t timestamp_length;
-	ULONGLONG timestamp_value;
+	ULONGLONG timestamp_value, qwRes;
 
 	// Validate the length of timestamp, we expect POSIX format with at least 12 characters +1 for null termination;
 	timestamp_length = wcsnlen_s(ldap_timestamp, 16);
@@ -40,7 +40,20 @@ INT VerifyLogonTimeToken(PWSTR ldap_timestamp)
 			UnixTimeToFileTime(ldap_time, &utc_ldap);
 			LONG ct = CompareFileTime(&utc_now, &utc_ldap);
 			if (ct == -1)
+			{
 				return_code = 1;	// Current UTC time is earlier that the UTC timestamp from the token, user can login;
+				// Setting the Kerberos ticket lifetime:
+				/*When the Msv1_0SubAuthenticationFilter function is used with the Kerberos authentication package, if the function call returns STATUS_SUCCESS 
+				and one of the two parameters LogoffTime or KickoffTime has a nonzero value, this value is used as the ticket lifetime. If, on the other hand, 
+				the values of both parameters are nonzero, the smaller of these two values is used. 
+				If the value that is used for the ticket lifetime (the sooner of LogoffTime and KickoffTime) is greater than the default ticket lifetime, 
+				then that value will be used as the maximum renewal time for the ticket. Conversely, if the larger of the two values 
+				(the later of LogoffTime and KickoffTime) is less than the default ticket lifetime, this value will be used as the ticket lifetime.*/
+				logoff_timestamp->HighPart = utc_ldap.dwHighDateTime;
+				logoff_timestamp->LowPart = utc_ldap.dwLowDateTime;
+				kickoff_timestamp->HighPart = utc_ldap.dwHighDateTime;
+				kickoff_timestamp->LowPart = utc_ldap.dwLowDateTime;
+			}
 		}
 	}
 	else

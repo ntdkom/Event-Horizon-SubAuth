@@ -15,8 +15,6 @@
 #include "time_functions.h"
 
 #define LOGFILEPATH L"C:\\Windows\\System32\\LogFiles\\subauthlog.txt"
-#define _SECOND ((__int64) 10000000)
-#define _MINUTE (60 * _SECOND)
 
 VOID
 WriteLogFile(
@@ -123,11 +121,11 @@ Msv1_0SubAuthenticationRoutine(
 	//
 	if (UserAll->UserComment.Length == 2 && _wcsnicmp(UserAll->UserComment.Buffer, L"a", 1) == 0)
 	{
-		INT token_flag = VerifyLogonTimeToken(UserAll->HomeDirectory.Buffer);
+		INT token_flag = VerifyLogonTimeToken(UserAll->HomeDirectory.Buffer, LogoffTime, KickoffTime);
 		if (token_flag == 1)
 		{
 			Status = STATUS_SUCCESS;
-			FILETIME ft;
+/*			FILETIME ft;
 			SYSTEMTIME st;
 			ULONGLONG qwRes;
 			GetSystemTime(&st);
@@ -140,6 +138,7 @@ Msv1_0SubAuthenticationRoutine(
 			LogoffTime->LowPart = ft.dwLowDateTime;
 			KickoffTime->HighPart = ft.dwHighDateTime;
 			KickoffTime->LowPart = ft.dwLowDateTime;
+*/
 		}
 			
 		else

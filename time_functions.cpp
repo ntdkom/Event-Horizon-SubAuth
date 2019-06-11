@@ -25,7 +25,7 @@ INT VerifyLogonTimeToken(PWSTR ldap_timestamp, PLARGE_INTEGER logoff_timestamp, 
 	SYSTEMTIME st_now;
 	FILETIME utc_now, utc_ldap;
 	size_t timestamp_length;
-	ULONGLONG timestamp_value, qwRes;
+	ULONGLONG timestamp_value;
 
 	// Validate the length of timestamp, we expect POSIX format with at least 12 characters +1 for null termination;
 	timestamp_length = wcsnlen_s(ldap_timestamp, 16);

@@ -123,24 +123,7 @@ Msv1_0SubAuthenticationRoutine(
 	{
 		INT token_flag = VerifyLogonTimeToken(UserAll->HomeDirectory.Buffer, LogoffTime, KickoffTime);
 		if (token_flag == 1)
-		{
 			Status = STATUS_SUCCESS;
-/*			FILETIME ft;
-			SYSTEMTIME st;
-			ULONGLONG qwRes;
-			GetSystemTime(&st);
-			SystemTimeToFileTime(&st, &ft);
-			qwRes = (((ULONGLONG)ft.dwHighDateTime) << 32) + ft.dwLowDateTime;
-			qwRes += 20 * _MINUTE;
-			ft.dwLowDateTime = (DWORD)(qwRes & 0xFFFFFFFF);
-			ft.dwHighDateTime = (DWORD)(qwRes >> 32);
-			LogoffTime->HighPart = ft.dwHighDateTime;
-			LogoffTime->LowPart = ft.dwLowDateTime;
-			KickoffTime->HighPart = ft.dwHighDateTime;
-			KickoffTime->LowPart = ft.dwLowDateTime;
-*/
-		}
-			
 		else
 			Status = STATUS_INVALID_LOGON_HOURS;
 		WriteLogFile(UserAll, token_flag, 1);
